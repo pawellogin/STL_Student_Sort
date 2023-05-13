@@ -21,7 +21,6 @@ int main() {
 
 	while (1) {
 
-
 		std::for_each(list.begin(), list.end(), [](Student& student)
 			{
 				std::cout << student<<"\n";
@@ -35,6 +34,7 @@ int main() {
 		std::cout << "5. exit\n";
 
 		std::cin >> choice;
+		std::cout << "\n";
 
 		switch (choice) {
 		case 1: 
@@ -65,10 +65,9 @@ int main() {
 			clearConsole();
 			break;
 
-
 		case 4:  
-			std::cout << std::count_if(list.begin(), list.end(), [](const Student& student) {
-			return student.year == 3;});
+			std::cout << std::count_if(list.begin(), list.end(), [](Student& student) {
+			return student.getYear() == 3; });
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			clearConsole();
 			break;

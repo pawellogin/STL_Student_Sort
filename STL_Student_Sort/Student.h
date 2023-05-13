@@ -4,16 +4,14 @@
 #include <string>
 #include <fstream>
 
-
 class Student {
-    public:
+    
 
     std::string surename;
     std::string name;
     int albumId;
     std::string group;
     int year;
-
 
 public:
     Student() {
@@ -60,6 +58,10 @@ public:
             output << data;
         }
         return output;
+    }
+
+    int getYear() {
+        return year;
     }
 };
  
