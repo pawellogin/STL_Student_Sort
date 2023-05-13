@@ -1,50 +1,83 @@
 #include <iostream>
-#include <windows.h>
 #include <vector>
-#include <string>
 #include <fstream>
-#include "Header.h"
+#include <iostream>
+#include <algorithm>
 #include "Student.h"
+#include <chrono>
+#include <thread>
 
-using namespace std;
+void clearConsole();
 
 int main() {
 	int choice = 0;
-	vector<string> options = { "1. add student","2. delete student","3. open student","4. load students ","5. save students ","6. change path","7. exit" };
-	vector<student> student_list;
 
-	string savePath = "C:\\saved_students";
-	string loadPath = "C:\\students_to_load";
+	std::vector<Student> list;
+	Student studentData;
 
-	//student_list.push_back(*(new student));
-	//student_list.push_back(*(new student));
+	std::ifstream ifile;
+	std::ofstream ofile;
+
 
 	while (1) {
 
-		cout << "student list :" << endl;
-		for (auto i : student_list) {
-			cout << i.name << endl;
-		}
 
-		cout << endl;
-		for (auto i : options) {
-			cout << i << endl;
-		}
+		std::for_each(list.begin(), list.end(), [](Student& student)
+			{
+				std::cout << student<<"\n";
+			});
+		std::cout << "\n";
 
-		cin >> choice;
+		std::cout << "1. add studnet to list\n";
+		std::cout << "2. save list to file\n";
+		std::cout << "3. load file to list\n";
+		std::cout << "4. how meny students from year 3?\n";
+		std::cout << "5. exit\n";
+
+		std::cin >> choice;
 
 		switch (choice) {
-		case 1: add_student(student_list); break;
-		case 2: delete_student(student_list); break;
-		case 3: open_student(student_list); break;
-		case 4: load_students(loadPath, student_list); break;
-		case 5: save_students(savePath, student_list); break;
-		case 6: changePaths(savePath, loadPath); break;
-		case 7: return 0; break;
+		case 1: 
+			std::cin >> studentData;
+			list.push_back(studentData); 
+			clearConsole();
+			break;
 
-		default: cout << "chose the correct option";
-			system("cls");
+		case 2: 
+			ofile.open("studentFiles.txt");
 
+			std::for_each(list.begin(), list.end(), [&ofile](Student& student) {
+				ofile << student<<"\n";
+				});
+			
+			ofile.close();
+			clearConsole();
+			 break;
+
+		case 3:
+			ifile.open("studentFiles.txt");
+
+			while (ifile >> studentData) {
+				list.push_back(studentData);
+			}
+
+			ifile.close();
+			clearConsole();
+			break;
+
+
+		case 4:  
+			std::cout << std::count_if(list.begin(), list.end(), [](const Student& student) {
+			return student.year == 3;});
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			clearConsole();
+			break;
+			 
+		case 5: return 0;
 		}
 	}
+}
+
+void clearConsole() {
+	std::cout << "\033[2J\033[1;1H";
 }
